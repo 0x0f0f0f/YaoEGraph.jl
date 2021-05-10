@@ -24,7 +24,7 @@ TermInterface.arity(t::Ctrl) = length(TermInterface.getargs(t))
 TermInterface.istree(e::Ctrl) = true
 
 
-function EGraphs.extractnode(g::EGraph, n::ENode{T}, extractor::Function)
+function EGraphs.extractnode(g::EGraph, n::ENode{Chain}, extractor::Function)
     return Chain(extractor.(n.args[2:end])...)
 end
 
