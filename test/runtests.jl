@@ -18,8 +18,12 @@ circ = Chain(Gate(X, Locations(1)), Gate(X, Locations(1)))
 TermInterface.getargs(circ)
 
 egraph = EGraph(circ)
+settermtype!(egraph, :Chain, 2, Chain)
 
 display(egraph.classes); println()
 
-saturate!(egraph, naive)
-extract!(egraph, astsize)
+saturate!(egraph, naive; mod=@__MODULE__)
+x = extract!(egraph, astsize) 
+
+@test x isa Chain 
+@test x.args == [[]]
