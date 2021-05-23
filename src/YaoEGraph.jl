@@ -8,6 +8,13 @@ using Metatheory.EGraphs
 using YaoHIR
 using Metatheory.TermInterface
 
+function TermInterface.preprocess(c::Chain)
+    if length(c.args) > 2
+        return Chain(c.args[1], preprocess(Chain(c.args[2:end]...)))
+    end
+    return c
+end
+
 TermInterface.gethead(t::Chain) = :call
 TermInterface.getargs(t::Chain) = [:Chain, t.args...]
 TermInterface.arity(t::Chain) = length(TermInterface.getargs(t))
