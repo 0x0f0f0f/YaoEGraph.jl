@@ -18,17 +18,17 @@ end
 TermInterface.gethead(t::Chain) = :call
 TermInterface.getargs(t::Chain) = [:Chain, t.args...]
 TermInterface.arity(t::Chain) = length(TermInterface.getargs(t))
-TermInterface.istree(e::Chain) = true
+TermInterface.istree(e::Type{Chain}) = true
 
 TermInterface.gethead(t::Gate) = :call
 TermInterface.getargs(t::Gate) = [:Gate, t.operation,  t.locations]
 TermInterface.arity(t::Gate) = length(TermInterface.getargs(t))
-TermInterface.istree(e::Gate) = true
+TermInterface.istree(e::Type{Gate}) = true
 
 TermInterface.gethead(t::Ctrl) = :call
 TermInterface.getargs(t::Ctrl) = [:Ctrl, t.gate, t.ctrl]
 TermInterface.arity(t::Ctrl) = length(TermInterface.getargs(t))
-TermInterface.istree(e::Ctrl) = true
+TermInterface.istree(e::Type{Ctrl}) = true
 
 function TermInterface.similarterm(x::Type{Chain}, head, args; metadata=nothing)
     @assert head == :call && args[1] == :Chain
