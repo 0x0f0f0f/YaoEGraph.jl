@@ -9,15 +9,13 @@ using YaoHIR: X, Y, Z
 @metatheory_init ()
 
 naive = @theory begin
-    Chain(Gate(X, locs), Chain(Gate(X, locs), C)) |> C
-    Chain(Gate(Z, locs), Gate(Z, locs)) |> Chain()
-    Chain(Gate(Z, locs), Gate(Y, locs)) |> Chain(Gate(X, locs))
+    Chain(Gate($X, locs), Chain(Gate($X, locs), C)) |> C
 end
 
-circ = Chain(Gate(X, Locations(1)), Gate(X, Locations(1)), Gate(Z, Locations(1)), Gate(Y, Locations(1)))
+circ = Chain(Gate(X, Locations(1)), Gate(X, Locations(1)), Gate(Y, Locations(1)))
 c = TermInterface.preprocess(circ)
 
-egraph = EGraph(c)
+egraph = EGraph(circ)
 settermtype!(egraph, :Chain, 0, Chain)
 settermtype!(egraph, :Chain, 1, Chain)
 settermtype!(egraph, :Chain, 2, Chain)
@@ -27,6 +25,7 @@ display(egraph.classes); println()
 
 saturate!(egraph, naive; mod = @__MODULE__)
 x = extract!(egraph, astsize) 
+@test x == Chain(Gate(Y, Locations(1)))
 
-@test x isa Chain 
+# @test x isa Chain 
 # @test x.args == []
