@@ -10,10 +10,11 @@ using YaoHIR: X, Y, Z
 
 naive = @theory begin
     Chain(Gate($X, locs), Chain(Gate($X, locs), C)) |> C
+    Chain(Chain(C)) => Chain(C)
 end
 
 circ = Chain(Gate(X, Locations(1)), Gate(X, Locations(1)), Gate(Y, Locations(1)))
-c = TermInterface.preprocess(circ)
+c = EGraphs.preprocess(circ)
 
 egraph = EGraph(circ)
 settermtype!(egraph, :Chain, 0, Chain)
@@ -25,7 +26,7 @@ display(egraph.classes); println()
 
 saturate!(egraph, naive; mod = @__MODULE__)
 x = extract!(egraph, astsize) 
-@test x == Chain(Gate(Y, Locations(1)))
+@test x == Gate(Y, Locations(1))
 
 # @test x isa Chain 
 # @test x.args == []
